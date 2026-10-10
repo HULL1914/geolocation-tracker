@@ -1,4 +1,4 @@
-// ---------- 1. set up the map ----------
+// set up 
 
 // start over Philadelphia; the map moves to your real location once it is found
 const map = L.map('map', {
@@ -19,15 +19,15 @@ const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/servi
 // let the user switch between the two base maps
 L.control.layers({ 'Streets': streets, 'Satellite': satellite }).addTo(map);
 
-// ---------- 2. things we draw for the tracking ----------
+// things we draw for the tracking ----------
 
-const markers = L.layerGroup().addTo(map);                         // one marker per location update
-const path = L.polyline([], { color: '#1f78b4', weight: 4 }).addTo(map); // line connecting the updates
-let accuracy_circle = null;                                       // shows how accurate the latest fix is
-let current_marker = null;                                        // the most recent location
-let count = 0;                                                    // number of updates so far
+const markers = L.layerGroup().addTo(map);                      
+const path = L.polyline([], { color: '#1f78b4', weight: 4 }).addTo(map); 
+let accuracy_circle = null;                                     
+let current_marker = null;                                      
+let count = 0;                                                    
 
-// ---------- 3. start tracking ----------
+// start tracking ----------
 
 let options = {
     enableHighAccuracy: true,
@@ -43,7 +43,7 @@ if (navigator.geolocation) {
     document.getElementById('log').innerHTML = 'Your browser does not natively support geolocation.';
 }
 
-// stop button uses clearWatch to end tracking
+// stop button to end tracking
 document.getElementById('stop-button').addEventListener('click', function() {
     if (watchid !== null) {
         navigator.geolocation.clearWatch(watchid);
@@ -53,7 +53,7 @@ document.getElementById('stop-button').addEventListener('click', function() {
     }
 });
 
-// ---------- 4. callbacks ----------
+// callbacks ----------
 
 function successCallback(position) {
     const c = position.coords;
@@ -83,11 +83,10 @@ function successCallback(position) {
         }).bindPopup(old_popup).addTo(markers);
     }
 
-    // add the newest location as a regular marker and open its popup
+    // add the newest location as a regular marker and open its pop up
     current_marker = L.marker(latlng).bindPopup(msg).addTo(markers);
     current_marker.openPopup();
 
-    // connect the dots
     path.addLatLng(latlng);
 
     // accuracy circle around the newest location
@@ -117,7 +116,6 @@ function errorCallback(error) {
     document.getElementById('log').innerHTML = `Error: ${msgs[error.code]}`;
 }
 
-// rough guess at how the location was found, based on the accuracy radius
 function guess_source(accuracy) {
     if (accuracy <= 15) return 'GPS';
     if (accuracy <= 500) return 'Wi-Fi / cell towers';
